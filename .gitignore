@@ -1,4 +1,5 @@
 exe
+fibo
 mt19937ar-cok/exe
 *.o
 docs/
