@@ -11,7 +11,7 @@
 
 #include <stdio.h>
 #include <stdlib.h>
-#include "mt19937ar-cok/mt19937ar-cok.h"
+#include "mt19937ar-cok.h"
 #include <gmp.h>
 
 #define AGE_MAX 16   // Âge maximum des lapins en années

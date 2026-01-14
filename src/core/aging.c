@@ -12,7 +12,7 @@
 #include "aging.h"
 #include "config.h"
 #include "reproduction.h"
-#include "mt19937ar-cok/mt19937ar-cok.h"
+#include "mt19937ar-cok.h"
 #include "gmp.h"
 
 #define GRAND_NB 10000 // Seuil pour utiliser l'approximation gaussienne

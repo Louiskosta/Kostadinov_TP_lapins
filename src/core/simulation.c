@@ -75,10 +75,10 @@ population *simulate_population(mpz_t nbFemale, mpz_t nbMale, int years)
     {
         simulate_year(pop);
 
-        // Affichage des statistiques annuelles
-        printf("ANNEE %d : ", y + 1);
-        afficher_pop(pop, 1);
-        fflush(stdout);
+        // Affichage des statistiques annuelles (commenté pour graphiques)
+        // printf("ANNEE %d : ", y + 1);
+        // afficher_pop(pop, 1);
+        // fflush(stdout);
     }
 
     return pop;

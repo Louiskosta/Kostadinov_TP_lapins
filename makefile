@@ -1,43 +1,135 @@
+# ============================================================================
+# Makefile - Simulation de Population de Lapins
+# ============================================================================
+
+# Compilateur et options
 CC = gcc
-CFLAGS = -Wall -Wextra -std=c17
-TARGET = exe
-EXPERIMENTS = experiments
-OBJS = main.o simulation.o config.o population.o aging.o reproduction.o mt19937ar-cok/mt19937ar-cok.o
-EXP_OBJS = experiments.o simulation.o config.o population.o aging.o reproduction.o mt19937ar-cok/mt19937ar-cok.o
+CFLAGS = -Wall -Wextra -std=c17 -Isrc/core -Isrc/external/mt19937ar-cok
+LDFLAGS = -lm -lgmp -lmpfr
 
-all: $(TARGET) $(EXPERIMENTS)
+# Répertoires
+SRC_CORE = src/core
+SRC_PROGRAMS = src/programs
+SRC_EXTERNAL = src/external/mt19937ar-cok
+BUILD_DIR = build
+BIN_DIR = bin
+DATA_DIR = data
 
-$(TARGET): $(OBJS)
-	$(CC) $(CFLAGS) -o $(TARGET) $(OBJS) -lm -lgmp -lmpfr
+# Exécutables
+TARGET = $(BIN_DIR)/exe
+EXPERIMENTS = $(BIN_DIR)/experiments
+GRAPHIQUES = $(BIN_DIR)/graphiques
+FIBO = $(BIN_DIR)/fibo
+
+# Fichiers objets (dans build/)
+CORE_OBJS = $(BUILD_DIR)/simulation.o $(BUILD_DIR)/config.o $(BUILD_DIR)/population.o \
+            $(BUILD_DIR)/aging.o $(BUILD_DIR)/reproduction.o
+MT_OBJ = $(BUILD_DIR)/mt19937ar-cok.o
+
+MAIN_OBJS = $(BUILD_DIR)/main.o $(CORE_OBJS) $(MT_OBJ)
+EXP_OBJS = $(BUILD_DIR)/experiments.o $(CORE_OBJS) $(MT_OBJ)
+GRAPH_OBJS = $(BUILD_DIR)/graphiques.o $(CORE_OBJS) $(MT_OBJ)
+FIBO_OBJS = $(BUILD_DIR)/fibo.o $(MT_OBJ)
+
+# ============================================================================
+# Règles principales
+# ============================================================================
+
+all: dirs $(TARGET) $(EXPERIMENTS) $(GRAPHIQUES) $(FIBO)
+
+dirs:
+	@mkdir -p $(BUILD_DIR) $(BIN_DIR) $(DATA_DIR)
+
+$(TARGET): $(MAIN_OBJS)
+	$(CC) $(CFLAGS) -o $@ $^ $(LDFLAGS)
 
 $(EXPERIMENTS): $(EXP_OBJS)
-	$(CC) $(CFLAGS) -o $(EXPERIMENTS) $(EXP_OBJS) -lm -lgmp -lmpfr
+	$(CC) $(CFLAGS) -o $@ $^ $(LDFLAGS)
 
-main.o: main.c simulation.h
-	$(CC) $(CFLAGS) -c main.c
+$(GRAPHIQUES): $(GRAPH_OBJS)
+	$(CC) $(CFLAGS) -o $@ $^ $(LDFLAGS)
 
-experiments.o: experiments.c simulation.h population.h reproduction.h aging.h config.h
-	$(CC) $(CFLAGS) -c experiments.c
+$(FIBO): $(FIBO_OBJS)
+	$(CC) $(CFLAGS) -o $@ $^ $(LDFLAGS)
 
-simulation.o: simulation.c simulation.h population.h reproduction.h aging.h
-	$(CC) $(CFLAGS) -c simulation.c
+# ============================================================================
+# Règles de compilation des objets
+# ============================================================================
 
-config.o: config.c config.h simulation.h
-	$(CC) $(CFLAGS) -c config.c
+# Programmes principaux
+$(BUILD_DIR)/main.o: $(SRC_PROGRAMS)/main.c $(SRC_CORE)/simulation.h
+	$(CC) $(CFLAGS) -c $< -o $@
 
-population.o: population.c population.h simulation.h reproduction.h
-	$(CC) $(CFLAGS) -c population.c
+$(BUILD_DIR)/experiments.o: $(SRC_PROGRAMS)/experiments.c $(SRC_CORE)/*.h
+	$(CC) $(CFLAGS) -c $< -o $@
 
-aging.o: aging.c aging.h simulation.h config.h reproduction.h
-	$(CC) $(CFLAGS) -c aging.c
+$(BUILD_DIR)/graphiques.o: $(SRC_PROGRAMS)/graphiques.c $(SRC_CORE)/*.h
+	$(CC) $(CFLAGS) -c $< -o $@
 
-reproduction.o: reproduction.c reproduction.h simulation.h
-	$(CC) $(CFLAGS) -c reproduction.c
+$(BUILD_DIR)/fibo.o: $(SRC_PROGRAMS)/fibo.c $(SRC_EXTERNAL)/mt19937ar-cok.h
+	$(CC) $(CFLAGS) -c $< -o $@
 
-mt19937ar-cok/mt19937ar-cok.o: mt19937ar-cok/mt19937ar-cok.c
-	$(CC) $(CFLAGS) -c mt19937ar-cok/mt19937ar-cok.c -o mt19937ar-cok/mt19937ar-cok.o
+# Modules core
+$(BUILD_DIR)/simulation.o: $(SRC_CORE)/simulation.c $(SRC_CORE)/simulation.h \
+                            $(SRC_CORE)/population.h $(SRC_CORE)/reproduction.h $(SRC_CORE)/aging.h
+	$(CC) $(CFLAGS) -c $< -o $@
+
+$(BUILD_DIR)/config.o: $(SRC_CORE)/config.c $(SRC_CORE)/config.h $(SRC_CORE)/simulation.h
+	$(CC) $(CFLAGS) -c $< -o $@
+
+$(BUILD_DIR)/population.o: $(SRC_CORE)/population.c $(SRC_CORE)/population.h \
+                            $(SRC_CORE)/simulation.h $(SRC_CORE)/reproduction.h
+	$(CC) $(CFLAGS) -c $< -o $@
+
+$(BUILD_DIR)/aging.o: $(SRC_CORE)/aging.c $(SRC_CORE)/aging.h \
+                      $(SRC_CORE)/simulation.h $(SRC_CORE)/config.h $(SRC_CORE)/reproduction.h
+	$(CC) $(CFLAGS) -c $< -o $@
+
+$(BUILD_DIR)/reproduction.o: $(SRC_CORE)/reproduction.c $(SRC_CORE)/reproduction.h \
+                              $(SRC_CORE)/simulation.h
+	$(CC) $(CFLAGS) -c $< -o $@
+
+# Bibliothèque externe
+$(BUILD_DIR)/mt19937ar-cok.o: $(SRC_EXTERNAL)/mt19937ar-cok.c $(SRC_EXTERNAL)/mt19937ar-cok.h
+	$(CC) $(CFLAGS) -c $< -o $@
+
+# ============================================================================
+# Règles utilitaires
+# ============================================================================
 
 clean:
-	rm -f $(OBJS) $(EXP_OBJS) $(TARGET) $(EXPERIMENTS)
+	rm -rf $(BUILD_DIR)/* $(BIN_DIR)/*
 
-.PHONY: all clean
+clean-all: clean
+	rm -rf $(DATA_DIR)/*.dat $(DATA_DIR)/*.gp $(DATA_DIR)/*.png
+
+run-exe: $(TARGET)
+	$(TARGET)
+
+run-fibo: $(FIBO)
+	$(FIBO) 15
+
+run-experiments: $(EXPERIMENTS)
+	$(EXPERIMENTS)
+
+run-graphiques: $(GRAPHIQUES)
+	cd $(DATA_DIR) && ../$(GRAPHIQUES)
+
+doc:
+	doxygen Doxyfile
+
+help:
+	@echo "Makefile - Simulation de Population de Lapins"
+	@echo ""
+	@echo "Cibles disponibles:"
+	@echo "  all              - Compile tous les programmes (défaut)"
+	@echo "  clean            - Supprime les fichiers objets et exécutables"
+	@echo "  clean-all        - Supprime aussi les données générées"
+	@echo "  run-exe          - Compile et exécute la simulation simple"
+	@echo "  run-fibo         - Compile et exécute Fibonacci"
+	@echo "  run-experiments  - Compile et exécute les expériences"
+	@echo "  run-graphiques   - Compile et génère les graphiques"
+	@echo "  doc              - Génère la documentation Doxygen"
+	@echo "  help             - Affiche cette aide"
+
+.PHONY: all dirs clean clean-all run-exe run-fibo run-experiments run-graphiques doc help

@@ -1,6 +1,20 @@
-exe
-fibo
-experiments
-mt19937ar-cok/exe
+# Exécutables
+bin/
+
+# Fichiers de compilation
+build/
 *.o
-docs/
+
+# Documentation générée
+docs/html/
+
+# Données et graphiques générés
+data/*.dat
+data/*.gp
+data/*.png
+
+# Fichiers temporaires
+src/external/mt19937ar-cok/exe
+*~
+.DS_Store
+test_structure.sh
