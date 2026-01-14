@@ -6,9 +6,10 @@ PROJECT_BRIEF          = "Simulation de croissance exponentielle d'une populatio
 PROJECT_NUMBER         = 1.0
 
 # Répertoires
-INPUT                  = .
-RECURSIVE              = NO
-EXCLUDE                = mt19937ar-cok
+INPUT                  = src/core src/programs
+RECURSIVE              = YES
+EXCLUDE                = src/external
+EXCLUDE_PATTERNS       = */mt19937ar-cok/*
 FILE_PATTERNS          = *.c *.h
 OUTPUT_DIRECTORY       = docs
 
