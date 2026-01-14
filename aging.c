@@ -1,14 +1,33 @@
+/**
+ * @file aging.c
+ * @brief Implémentation de la logique de vieillissement
+ *
+ * Ce fichier contient les fonctions qui gèrent le vieillissement de la population:
+ * - Vieillissement des mâles (survie selon l'âge)
+ * - Vieillissement des femelles (survie et attribution des portées)
+ * - Maturation des bébés (devenir adulte mâle ou femelle)
+ * - Passage au mois suivant pour toute la population
+ */
+
 #include "aging.h"
 #include "config.h"
 #include "reproduction.h"
 #include "mt19937ar-cok/mt19937ar-cok.h"
 #include "gmp.h"
 
-#define GRAND_NB 10000
+#define GRAND_NB 10000 // Seuil pour utiliser l'approximation gaussienne
 
 extern double prob_maturity[];
 extern double survival_rate_month_baby;
 
+/**
+ * @brief Retourne l'état de la population au mois précédent
+ *
+ * @param pop Pointeur vers la population
+ * @param year Âge en années
+ * @param month Mois (0-11)
+ * @return Structure mois_lapin du mois précédent
+ */
 mois_lapin prev_month(population *pop, int year, int month)
 {
     if (!month)
@@ -23,6 +42,18 @@ mois_lapin prev_month(population *pop, int year, int month)
     return pop->lapins_par_age[year][month];
 }
 
+/**
+ * @brief Simule le vieillissement et la survie des mâles adultes
+ *
+ * Pour chaque mâle du mois précédent, tire aléatoirement s'il survit
+ * selon le taux de survie de son âge. Deux méthodes sont utilisées:
+ * - Simulation individuelle pour les petites populations
+ * - Approximation binomiale gaussienne pour les grandes populations
+ *
+ * @param pop_month Pointeur vers le mois de destination
+ * @param pop_month_prev Mois source (mois précédent)
+ * @param age Âge en années
+ */
 void male_aging(mois_lapin *pop_month, mois_lapin pop_month_prev, int age)
 {
     mpz_set_ui(pop_month->nb_male, 0);
@@ -46,6 +77,18 @@ void male_aging(mois_lapin *pop_month, mois_lapin pop_month_prev, int age)
     mpz_clear(nb_male);
 }
 
+/**
+ * @brief Simule le vieillissement et la survie des femelles adultes
+ *
+ * Gère la survie des femelles et leur attribution de nouvelles portées.
+ * Traitement spécial au début de l'année (month == 0) où les femelles
+ * reçoivent un nouveau nombre de portées pour l'année.
+ *
+ * @param pop_month Pointeur vers le mois de destination
+ * @param pop_month_prev Mois source (mois précédent)
+ * @param age Âge en années
+ * @param month Mois actuel (0-11)
+ */
 void female_aging(mois_lapin *pop_month, mois_lapin pop_month_prev, int age, int month)
 {
     for (int i = 0; i < 10; i++)
@@ -109,6 +152,20 @@ void female_aging(mois_lapin *pop_month, mois_lapin pop_month_prev, int age, int
     }
 }
 
+/**
+ * @brief Simule le vieillissement et la maturation des bébés
+ *
+ * Les bébés peuvent:
+ * 1. Mourir (selon survival_rate_month_baby)
+ * 2. Devenir matures (selon prob_maturity[month])
+ *    - Devenir mâle (50% de chance)
+ *    - Devenir femelle (50% de chance) avec attribution du nombre de portées
+ * 3. Rester bébé un mois de plus
+ *
+ * @param pop_month Pointeur vers le mois de destination
+ * @param pop_month_prev Mois source (mois précédent)
+ * @param month Mois d'âge du bébé (0-10)
+ */
 void babies_aging(mois_lapin *pop_month, mois_lapin pop_month_prev, int month)
 {
     mpz_set_ui(pop_month->nb_babies, 0);
@@ -182,6 +239,17 @@ void babies_aging(mois_lapin *pop_month, mois_lapin pop_month_prev, int month)
     mpz_clear(n_babies);
 }
 
+/**
+ * @brief Fait vieillir toute la population d'un mois
+ *
+ * Parcourt la population en sens inverse (des plus vieux aux plus jeunes)
+ * pour éviter d'écraser les données. Pour chaque âge et mois:
+ * 1. Applique le vieillissement des mâles
+ * 2. Applique le vieillissement des femelles
+ * 3. Applique la maturation des bébés (uniquement pour l'âge 0)
+ *
+ * @param pop Pointeur vers la population à faire vieillir
+ */
 void aging(population *pop)
 {
     mois_lapin pop_month;

@@ -1,9 +1,30 @@
+/**
+ * @file population.c
+ * @brief Implémentation de la gestion de la population
+ *
+ * Ce fichier contient les fonctions pour initialiser et afficher
+ * les données de la population de lapins.
+ */
+
 #include "population.h"
 #include "reproduction.h"
 
+/**
+ * @brief Initialise une nouvelle population de lapins
+ *
+ * Alloue la mémoire pour la structure population et initialise tous
+ * les compteurs GMP à zéro. Place la population initiale de femelles
+ * et mâles dans la tranche d'âge de 1 an.
+ *
+ * @param nbFemale Nombre initial de femelles
+ * @param nbMale Nombre initial de mâles
+ * @return Pointeur vers la structure population allouée
+ */
 population *initialize_population(mpz_t nbFemale, mpz_t nbMale)
 {
     population *p = malloc(sizeof(population));
+
+    // Initialisation de tous les compteurs GMP pour chaque âge et mois
     for (int age = 0; age < AGE_MAX; age++)
     {
         for (int month = 0; month < NB_MONTHS; month++)
@@ -16,8 +37,12 @@ population *initialize_population(mpz_t nbFemale, mpz_t nbMale)
             }
         }
     }
+
+    // Placement de la population initiale à l'âge de 1 an
     mpz_set(p->lapins_par_age[1][0].nb_male, nbMale);
     unsigned long n_female = mpz_get_ui(nbFemale);
+
+    // Répartition aléatoire des femelles selon leur nombre de portées prévues
     for (unsigned long i = 0; i < n_female; i++)
     {
         mpz_add_ui(p->lapins_par_age[1][0].femelles_par_accouchements_restants[litter_per_year()], p->lapins_par_age[1][0].femelles_par_accouchements_restants[litter_per_year()], 1);
@@ -26,10 +51,19 @@ population *initialize_population(mpz_t nbFemale, mpz_t nbMale)
     return p;
 }
 
+/**
+ * @brief Affiche les statistiques de la population
+ *
+ * @param pop Pointeur vers la population à afficher
+ * @param mode Mode d'affichage:
+ *             - 0: Affichage détaillé par âge et mois
+ *             - 1: Affichage résumé (total bébés, mâles, femelles)
+ */
 void afficher_pop(population *pop, int mode)
 {
     if (mode == 0)
     {
+        // Mode détaillé: affichage par âge et mois
         printf("--------------------------------\n");
         for (int year = 0; year < AGE_MAX + 1; year++)
         {
@@ -48,12 +82,15 @@ void afficher_pop(population *pop, int mode)
     }
     else
     {
+        // Mode résumé: calcul et affichage des totaux
         mpz_t somme_babies;
         mpz_t somme_male;
         mpz_t somme_female;
         mpz_init_set_ui(somme_babies, 0);
         mpz_init_set_ui(somme_male, 0);
         mpz_init_set_ui(somme_female, 0);
+
+        // Somme sur tous les âges et mois
         for (int year = 0; year < AGE_MAX; year++)
         {
             for (int month = 0; month < 12; month++)
