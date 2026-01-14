@@ -1,0 +1,332 @@
+
+╔══════════════════════════════════════════════════════════════╗
+║  EXPÉRIMENTATIONS - SIMULATION POPULATION DE LAPINS         ║
+║  Analyse de la variabilité stochastique                     ║
+╚══════════════════════════════════════════════════════════════╝
+
+
+### EXPÉRIENCE 1 : Conditions initiales faibles ###
+
+==============================================================
+SÉRIE D'EXPÉRIENCES : 10 femelles, 10 mâles, 10 ans
+Nombre d'expériences : 5
+==============================================================
+
+Expérience 1/5...
+ANNEE 1 : babies = 124, male = 21, females = 27
+ANNEE 2 : babies = 459, male = 91, females = 92
+ANNEE 3 : babies = 1401, male = 307, females = 330
+ANNEE 4 : babies = 4961, male = 1056, females = 1113
+ANNEE 5 : babies = 15491, male = 3694, females = 3699
+ANNEE 6 : babies = 52226, male = 12239, females = 12178
+ANNEE 7 : babies = 169038, male = 38568, females = 38762
+ANNEE 8 : babies = 558741, male = 84796, females = 107116
+ANNEE 9 : babies = 1505001, male = 150934, females = 248124
+ANNEE 10 : babies = 3377493, male = 276675, females = 552473
+Expérience 2/5...
+ANNEE 1 : babies = 120, male = 38, females = 25
+ANNEE 2 : babies = 287, male = 88, females = 75
+ANNEE 3 : babies = 1019, male = 238, females = 257
+ANNEE 4 : babies = 3581, male = 813, females = 821
+ANNEE 5 : babies = 11402, male = 2725, females = 2617
+ANNEE 6 : babies = 37369, male = 8794, females = 8561
+ANNEE 7 : babies = 126297, male = 28966, females = 28701
+ANNEE 8 : babies = 413916, male = 68520, females = 81824
+ANNEE 9 : babies = 1144071, male = 138158, females = 207285
+ANNEE 10 : babies = 2693073, male = 233386, females = 448334
+Expérience 3/5...
+ANNEE 1 : babies = 26, male = 10, females = 6
+ANNEE 2 : babies = 61, male = 25, females = 16
+ANNEE 3 : babies = 173, male = 54, females = 37
+ANNEE 4 : babies = 603, male = 162, females = 149
+ANNEE 5 : babies = 1800, male = 429, females = 451
+ANNEE 6 : babies = 5778, male = 1510, females = 1356
+ANNEE 7 : babies = 19674, male = 4519, females = 4486
+ANNEE 8 : babies = 64586, male = 15040, females = 14964
+ANNEE 9 : babies = 221231, male = 46200, females = 48851
+ANNEE 10 : babies = 698485, male = 98412, females = 130847
+Expérience 4/5...
+ANNEE 1 : babies = 116, male = 25, females = 31
+ANNEE 2 : babies = 459, male = 97, females = 111
+ANNEE 3 : babies = 1739, male = 328, females = 365
+ANNEE 4 : babies = 5884, male = 1250, females = 1364
+ANNEE 5 : babies = 18963, male = 4494, females = 4436
+ANNEE 6 : babies = 63435, male = 14817, females = 14510
+ANNEE 7 : babies = 207925, male = 44596, females = 45929
+ANNEE 8 : babies = 656605, male = 92692, females = 124216
+ANNEE 9 : babies = 1690107, male = 160617, females = 277721
+ANNEE 10 : babies = 3798116, male = 304724, females = 619098
+Expérience 5/5...
+ANNEE 1 : babies = 97, male = 27, females = 21
+ANNEE 2 : babies = 410, male = 86, females = 75
+ANNEE 3 : babies = 1282, male = 280, females = 284
+ANNEE 4 : babies = 4089, male = 975, females = 1008
+ANNEE 5 : babies = 13052, male = 3186, females = 3163
+ANNEE 6 : babies = 42073, male = 10301, females = 9935
+ANNEE 7 : babies = 145392, male = 32505, females = 32548
+ANNEE 8 : babies = 469190, male = 74998, females = 91747
+ANNEE 9 : babies = 1286235, male = 140649, females = 220385
+ANNEE 10 : babies = 2927147, male = 247355, females = 484093
+
+----- RÉSULTATS STATISTIQUES -----
+Population moyenne :    3377942 lapins
+Écart-type :           1309604 lapins
+Coefficient de variation : 38.77%
+Population minimale :  927744 lapins
+Population maximale :  4721938 lapins
+
+Détail des expériences :
+Exp  1:    4206641 lapins (bébés: 3377493, mâles:  276675, femelles:  552473)
+Exp  2:    3374793 lapins (bébés: 2693073, mâles:  233386, femelles:  448334)
+Exp  3:     927744 lapins (bébés:  698485, mâles:   98412, femelles:  130847)
+Exp  4:    4721938 lapins (bébés: 3798116, mâles:  304724, femelles:  619098)
+Exp  5:    3658595 lapins (bébés: 2927147, mâles:  247355, femelles:  484093)
+
+
+### EXPÉRIENCE 2 : Conditions initiales moyennes ###
+
+==============================================================
+SÉRIE D'EXPÉRIENCES : 50 femelles, 50 mâles, 10 ans
+Nombre d'expériences : 5
+==============================================================
+
+Expérience 1/5...
+ANNEE 1 : babies = 294, male = 114, females = 93
+ANNEE 2 : babies = 1002, male = 246, females = 228
+ANNEE 3 : babies = 3362, male = 740, females = 734
+ANNEE 4 : babies = 10215, male = 2456, females = 2377
+ANNEE 5 : babies = 33116, male = 8015, females = 7592
+ANNEE 6 : babies = 106769, male = 25094, females = 24283
+ANNEE 7 : babies = 352569, male = 65057, females = 73602
+ANNEE 8 : babies = 1007181, male = 130288, females = 187624
+ANNEE 9 : babies = 2389790, male = 212144, females = 400350
+ANNEE 10 : babies = 5569310, male = 429715, females = 893162
+Expérience 2/5...
+ANNEE 1 : babies = 435, male = 100, females = 120
+ANNEE 2 : babies = 1410, male = 308, females = 293
+ANNEE 3 : babies = 4871, male = 1041, females = 1044
+ANNEE 4 : babies = 15335, male = 3594, females = 3575
+ANNEE 5 : babies = 50048, male = 11747, females = 11844
+ANNEE 6 : babies = 169738, male = 37887, females = 38113
+ANNEE 7 : babies = 541631, male = 83210, females = 103894
+ANNEE 8 : babies = 1461483, male = 152440, females = 244393
+ANNEE 9 : babies = 3296624, male = 274719, females = 539057
+ANNEE 10 : babies = 7699840, male = 474790, females = 1088464
+Expérience 3/5...
+ANNEE 1 : babies = 688, male = 196, females = 214
+ANNEE 2 : babies = 2733, male = 573, females = 572
+ANNEE 3 : babies = 9538, male = 1957, females = 2103
+ANNEE 4 : babies = 33204, male = 7336, females = 7734
+ANNEE 5 : babies = 111625, male = 25452, females = 25791
+ANNEE 6 : babies = 366395, male = 67321, females = 76598
+ANNEE 7 : babies = 1045382, male = 135458, females = 194854
+ANNEE 8 : babies = 2492249, male = 219599, females = 414862
+ANNEE 9 : babies = 5793946, male = 427354, females = 905054
+ANNEE 10 : babies = 12361677, male = 652974, females = 1710394
+Expérience 4/5...
+ANNEE 1 : babies = 616, male = 186, females = 189
+ANNEE 2 : babies = 2775, male = 516, females = 619
+ANNEE 3 : babies = 9529, male = 2058, females = 2081
+ANNEE 4 : babies = 30933, male = 7221, females = 7292
+ANNEE 5 : babies = 106833, male = 24142, females = 24591
+ANNEE 6 : babies = 359436, male = 65194, females = 74871
+ANNEE 7 : babies = 1019849, male = 132456, females = 191071
+ANNEE 8 : babies = 2428054, male = 215447, females = 405168
+ANNEE 9 : babies = 5619939, male = 417074, females = 879853
+ANNEE 10 : babies = 11967692, male = 632530, females = 1660146
+Expérience 5/5...
+ANNEE 1 : babies = 382, male = 99, females = 112
+ANNEE 2 : babies = 1403, male = 318, females = 326
+ANNEE 3 : babies = 4600, male = 1066, females = 994
+ANNEE 4 : babies = 13547, male = 3384, females = 3241
+ANNEE 5 : babies = 47490, male = 10907, females = 11059
+ANNEE 6 : babies = 156594, male = 36299, females = 36126
+ANNEE 7 : babies = 504912, male = 81111, females = 98844
+ANNEE 8 : babies = 1402607, male = 146232, females = 233918
+ANNEE 9 : babies = 3150871, male = 262237, females = 517383
+ANNEE 10 : babies = 7342956, male = 453528, females = 1044868
+
+----- RÉSULTATS STATISTIQUES -----
+Population moyenne :    10796409 lapins
+Écart-type :           3125682 lapins
+Coefficient de variation : 28.95%
+Population minimale :  6892187 lapins
+Population maximale :  14725045 lapins
+
+Détail des expériences :
+Exp  1:    6892187 lapins (bébés: 5569310, mâles:  429715, femelles:  893162)
+Exp  2:    9263094 lapins (bébés: 7699840, mâles:  474790, femelles: 1088464)
+Exp  3:   14725045 lapins (bébés: 12361677, mâles:  652974, femelles: 1710394)
+Exp  4:   14260368 lapins (bébés: 11967692, mâles:  632530, femelles: 1660146)
+Exp  5:    8841352 lapins (bébés: 7342956, mâles:  453528, femelles: 1044868)
+
+
+### EXPÉRIENCE 3 : Conditions initiales fortes ###
+
+==============================================================
+SÉRIE D'EXPÉRIENCES : 100 femelles, 100 mâles, 10 ans
+Nombre d'expériences : 5
+==============================================================
+
+Expérience 1/5...
+ANNEE 1 : babies = 515, male = 152, females = 108
+ANNEE 2 : babies = 1613, male = 392, females = 365
+ANNEE 3 : babies = 5502, male = 1284, females = 1270
+ANNEE 4 : babies = 18009, male = 4298, females = 4148
+ANNEE 5 : babies = 59189, male = 13713, females = 13765
+ANNEE 6 : babies = 199908, male = 42987, females = 44470
+ANNEE 7 : babies = 627568, male = 91037, females = 118162
+ANNEE 8 : babies = 1641742, male = 159924, females = 268115
+ANNEE 9 : babies = 3655058, male = 297517, females = 595273
+ANNEE 10 : babies = 8349808, male = 493018, females = 1172384
+Expérience 2/5...
+ANNEE 1 : babies = 1060, male = 347, females = 329
+ANNEE 2 : babies = 3832, male = 907, females = 928
+ANNEE 3 : babies = 13388, male = 2942, females = 2950
+ANNEE 4 : babies = 42615, male = 9918, females = 9717
+ANNEE 5 : babies = 145914, male = 33107, females = 33289
+ANNEE 6 : babies = 479202, male = 75667, females = 93309
+ANNEE 7 : babies = 1315382, male = 142699, females = 225375
+ANNEE 8 : babies = 2988938, male = 252901, females = 494718
+ANNEE 9 : babies = 7015263, male = 467569, females = 1034542
+ANNEE 10 : babies = 14679056, male = 751017, females = 2010191
+Expérience 3/5...
+ANNEE 1 : babies = 1081, male = 317, females = 313
+ANNEE 2 : babies = 4276, male = 955, females = 897
+ANNEE 3 : babies = 13609, male = 3052, females = 3062
+ANNEE 4 : babies = 44711, male = 10233, females = 10342
+ANNEE 5 : babies = 152994, male = 34540, females = 35442
+ANNEE 6 : babies = 499474, male = 78629, females = 97822
+ANNEE 7 : babies = 1379591, male = 143035, females = 230136
+ANNEE 8 : babies = 3105477, male = 257680, females = 509354
+ANNEE 9 : babies = 7318100, male = 463353, females = 1050844
+ANNEE 10 : babies = 15007179, male = 754906, females = 2055328
+Expérience 4/5...
+ANNEE 1 : babies = 993, male = 320, females = 271
+ANNEE 2 : babies = 3676, male = 927, females = 858
+ANNEE 3 : babies = 11789, male = 2886, females = 2828
+ANNEE 4 : babies = 40472, male = 9344, females = 9400
+ANNEE 5 : babies = 135053, male = 31255, females = 31130
+ANNEE 6 : babies = 446112, male = 73665, females = 88432
+ANNEE 7 : babies = 1245168, male = 142428, females = 218643
+ANNEE 8 : babies = 2873345, male = 244724, females = 476754
+ANNEE 9 : babies = 6771479, male = 450863, females = 998388
+ANNEE 10 : babies = 14087104, male = 722242, females = 1938366
+Expérience 5/5...
+ANNEE 1 : babies = 1183, male = 331, females = 348
+ANNEE 2 : babies = 4300, male = 996, females = 1003
+ANNEE 3 : babies = 14030, male = 3277, females = 3215
+ANNEE 4 : babies = 47482, male = 10810, females = 10477
+ANNEE 5 : babies = 152073, male = 35557, females = 34663
+ANNEE 6 : babies = 491533, male = 78882, females = 96278
+ANNEE 7 : babies = 1354246, male = 148322, females = 232128
+ANNEE 8 : babies = 3112281, male = 259927, females = 509755
+ANNEE 9 : babies = 7287547, male = 466438, females = 1048984
+ANNEE 10 : babies = 14958869, male = 754955, females = 2046539
+
+----- RÉSULTATS STATISTIQUES -----
+Population moyenne :    15956192 lapins
+Écart-type :           2994776 lapins
+Coefficient de variation : 18.77%
+Population minimale :  10015210 lapins
+Population maximale :  17817413 lapins
+
+Détail des expériences :
+Exp  1:   10015210 lapins (bébés: 8349808, mâles:  493018, femelles: 1172384)
+Exp  2:   17440264 lapins (bébés: 14679056, mâles:  751017, femelles: 2010191)
+Exp  3:   17817413 lapins (bébés: 15007179, mâles:  754906, femelles: 2055328)
+Exp  4:   16747712 lapins (bébés: 14087104, mâles:  722242, femelles: 1938366)
+Exp  5:   17760363 lapins (bébés: 14958869, mâles:  754955, femelles: 2046539)
+
+
+### EXPÉRIENCE 4 : Simulation sur 20 ans ###
+
+==============================================================
+SÉRIE D'EXPÉRIENCES : 100 femelles, 100 mâles, 20 ans
+Nombre d'expériences : 3
+==============================================================
+
+Expérience 1/3...
+ANNEE 1 : babies = 849, male = 304, females = 270
+ANNEE 2 : babies = 3318, male = 824, females = 755
+ANNEE 3 : babies = 11746, male = 2570, females = 2598
+ANNEE 4 : babies = 39409, male = 8947, females = 9101
+ANNEE 5 : babies = 134857, male = 30242, females = 30432
+ANNEE 6 : babies = 435068, male = 72398, females = 86785
+ANNEE 7 : babies = 1213821, male = 138973, females = 213826
+ANNEE 8 : babies = 2804383, male = 240394, females = 465368
+ANNEE 9 : babies = 6582110, male = 440541, females = 973000
+ANNEE 10 : babies = 13637919, male = 700700, females = 1880653
+ANNEE 11 : babies = 28783967, male = 1313106, females = 3793554
+ANNEE 12 : babies = 61179220, male = 2676471, females = 7894403
+ANNEE 13 : babies = 130851687, male = 5671087, females = 16765587
+ANNEE 14 : babies = 281506052, male = 12137920, females = 35873469
+ANNEE 15 : babies = 606004962, male = 26085569, females = 77093080
+ANNEE 16 : babies = 1306524559, male = 56178405, females = 165960872
+ANNEE 17 : babies = 2816462233, male = 121069259, females = 357588694
+ANNEE 18 : babies = 6072854799, male = 261012761, females = 770962054
+ANNEE 19 : babies = 13096585546, male = 562904835, females = 1662351822
+ANNEE 20 : babies = 28243175691, male = 1213786497, females = 3584793696
+Expérience 2/3...
+ANNEE 1 : babies = 735, male = 229, females = 205
+ANNEE 2 : babies = 2623, male = 576, females = 550
+ANNEE 3 : babies = 8621, male = 1895, females = 2034
+ANNEE 4 : babies = 30707, male = 6667, females = 7047
+ANNEE 5 : babies = 102738, male = 23373, females = 23687
+ANNEE 6 : babies = 336437, male = 65708, females = 72946
+ANNEE 7 : babies = 980369, male = 127346, females = 182158
+ANNEE 8 : babies = 2316485, male = 206290, females = 387686
+ANNEE 9 : babies = 5375714, male = 417434, females = 866152
+ANNEE 10 : babies = 11634107, male = 625419, females = 1615858
+ANNEE 11 : babies = 24322119, male = 1122401, females = 3215219
+ANNEE 12 : babies = 51483157, male = 2265006, females = 6672937
+ANNEE 13 : babies = 110230365, male = 4781654, females = 14134749
+ANNEE 14 : babies = 236895950, male = 10212899, females = 30215281
+ANNEE 15 : babies = 509930374, male = 21954379, females = 64906437
+ANNEE 16 : babies = 1099315783, male = 47274961, females = 139687316
+ANNEE 17 : babies = 2369753075, male = 101861781, females = 300937491
+ANNEE 18 : babies = 5110219025, male = 219641583, females = 648744353
+ANNEE 19 : babies = 11019030665, male = 473565043, females = 1398716083
+ANNEE 20 : babies = 23763143495, male = 1021297952, females = 3016178202
+Expérience 3/3...
+ANNEE 1 : babies = 670, male = 246, females = 204
+ANNEE 2 : babies = 3029, male = 638, females = 599
+ANNEE 3 : babies = 8889, male = 2242, females = 2129
+ANNEE 4 : babies = 30126, male = 7048, females = 7030
+ANNEE 5 : babies = 101155, male = 23476, females = 23279
+ANNEE 6 : babies = 343847, male = 62001, females = 71313
+ANNEE 7 : babies = 980155, male = 126807, females = 182666
+ANNEE 8 : babies = 2323168, male = 206337, females = 389240
+ANNEE 9 : babies = 5388155, male = 417447, females = 867267
+ANNEE 10 : babies = 11649234, male = 628048, females = 1620753
+ANNEE 11 : babies = 24391543, male = 1128112, females = 3222513
+ANNEE 12 : babies = 51555819, male = 2273132, females = 6683884
+ANNEE 13 : babies = 110440147, male = 4788911, females = 14163765
+ANNEE 14 : babies = 237347810, male = 10233806, females = 30260212
+ANNEE 15 : babies = 510745072, male = 21990275, females = 64998031
+ANNEE 16 : babies = 1101093779, male = 47341545, females = 139895976
+ANNEE 17 : babies = 2373560309, male = 102022903, females = 301392423
+ANNEE 18 : babies = 5117869033, male = 219973753, females = 649743299
+ANNEE 19 : babies = 11036200161, male = 474331695, females = 1400851033
+ANNEE 20 : babies = 23798587970, male = 1022788594, females = 3020745344
+
+----- RÉSULTATS STATISTIQUES -----
+Population moyenne :    29561499147 lapins
+Écart-type :           2460971465 lapins
+Coefficient de variation : 8.32%
+Population minimale :  27800619649 lapins
+Population maximale :  33041755884 lapins
+
+Détail des expériences :
+Exp  1: 33041755884 lapins (bébés: 28243175691, mâles: 1213786497, femelles: 3584793696)
+Exp  2: 27800619649 lapins (bébés: 23763143495, mâles: 1021297952, femelles: 3016178202)
+Exp  3: 27842121908 lapins (bébés: 23798587970, mâles: 1022788594, femelles: 3020745344)
+
+
+═══════════════════════════════════════════════════════════════
+CONCLUSION :
+Les résultats montrent une forte variabilité stochastique.
+Plusieurs exécutions sont nécessaires pour obtenir des résultats
+statistiquement significatifs.
+═══════════════════════════════════════════════════════════════
+

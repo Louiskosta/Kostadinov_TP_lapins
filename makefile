@@ -1,15 +1,23 @@
 CC = gcc
 CFLAGS = -Wall -Wextra -std=c17
 TARGET = exe
+EXPERIMENTS = experiments
 OBJS = main.o simulation.o config.o population.o aging.o reproduction.o mt19937ar-cok/mt19937ar-cok.o
+EXP_OBJS = experiments.o simulation.o config.o population.o aging.o reproduction.o mt19937ar-cok/mt19937ar-cok.o
 
-all: $(TARGET)
+all: $(TARGET) $(EXPERIMENTS)
 
 $(TARGET): $(OBJS)
 	$(CC) $(CFLAGS) -o $(TARGET) $(OBJS) -lm -lgmp -lmpfr
 
+$(EXPERIMENTS): $(EXP_OBJS)
+	$(CC) $(CFLAGS) -o $(EXPERIMENTS) $(EXP_OBJS) -lm -lgmp -lmpfr
+
 main.o: main.c simulation.h
 	$(CC) $(CFLAGS) -c main.c
+
+experiments.o: experiments.c simulation.h population.h reproduction.h aging.h config.h
+	$(CC) $(CFLAGS) -c experiments.c
 
 simulation.o: simulation.c simulation.h population.h reproduction.h aging.h
 	$(CC) $(CFLAGS) -c simulation.c
@@ -30,6 +38,6 @@ mt19937ar-cok/mt19937ar-cok.o: mt19937ar-cok/mt19937ar-cok.c
 	$(CC) $(CFLAGS) -c mt19937ar-cok/mt19937ar-cok.c -o mt19937ar-cok/mt19937ar-cok.o
 
 clean:
-	rm -f $(OBJS) $(TARGET)
+	rm -f $(OBJS) $(EXP_OBJS) $(TARGET) $(EXPERIMENTS)
 
 .PHONY: all clean

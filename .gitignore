@@ -1,5 +1,6 @@
 exe
 fibo
+experiments
 mt19937ar-cok/exe
 *.o
 docs/

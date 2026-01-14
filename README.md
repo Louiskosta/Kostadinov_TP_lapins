@@ -42,8 +42,20 @@ make
 
 ### Exécution
 ```bash
-./exe
+./exe              # Une simulation simple
+./experiments      # Expérimentations multiples avec statistiques
 ```
+
+## 3. Programme d'Expérimentations (experiments)
+
+Lance plusieurs simulations avec différentes conditions initiales pour analyser la variabilité stochastique. Calcule les statistiques (moyenne, écart-type, min, max).
+
+### Exécution
+```bash
+./experiments
+```
+
+Ce programme lance automatiquement plusieurs séries d'expériences et affiche les résultats statistiques.
 
 ## Structure du projet
 
@@ -51,6 +63,7 @@ make
 .
 ├── fibo.c              # Simulation simple de Fibonacci
 ├── main.c              # Point d'entrée de la simulation réaliste
+├── experiments.c       # Programme d'expérimentations multiples
 ├── simulation.c/h      # Moteur de simulation
 ├── config.c/h          # Configuration des paramètres
 ├── population.c/h      # Gestion de la population
@@ -59,6 +72,7 @@ make
 ├── mt19937ar-cok/      # Générateur de nombres aléatoires
 ├── makefile            # Fichier de compilation
 ├── Doxyfile            # Configuration Doxygen
+├── RAPPORT.md          # Template de rapport
 └── docs/               # Documentation générée
 ```
 
