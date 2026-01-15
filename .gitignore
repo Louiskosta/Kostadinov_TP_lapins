@@ -8,6 +8,15 @@ build/
 # Documentation générée
 docs/html/
 
+# Fichiers auxiliaires LaTeX
+*.aux
+*.log
+*.out
+*.toc
+*.synctex.gz
+*.fls
+*.fdb_latexmk
+
 # Données et graphiques générés
 data/*.dat
 data/*.gp
