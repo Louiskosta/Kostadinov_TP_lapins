@@ -25,13 +25,14 @@ TP_lapins/
 ├── src/                  # Code source
 │   ├── core/             # Modules de simulation
 │   ├── programs/         # Programmes exécutables
-│   └── external/         # Bibliothèques externes
+│   └── external/         # Bibliothèques externes (MT19937)
 ├── bin/                  # Exécutables compilés
 ├── build/                # Fichiers objets
 ├── data/                 # Graphiques et données générés
-└── docs/                 # Documentation
-    ├── html/             # Documentation Doxygen
-    └── guide/            # Guides utilisateur
+├── docs/                 # Documentation
+│   ├── html/             # Documentation Doxygen
+│   └── rapport.tex       # Rapport LaTeX du projet
+└── rapport.pdf           # Rapport compilé
 ```
 
 ## 📊 Programmes Disponibles
@@ -66,10 +67,8 @@ make help         # Affiche l'aide complète
 
 ## 📚 Documentation
 
-- **[RESUME.md](RESUME.md)** - Résumé complet du projet
-- **[docs/guide/README.md](docs/guide/README.md)** - Guide d'utilisation détaillé
-- **[docs/guide/GUIDE_GRAPHIQUES.md](docs/guide/GUIDE_GRAPHIQUES.md)** - Interprétation des graphiques
-- **[docs/guide/RAPPORT.md](docs/guide/RAPPORT.md)** - Template de rapport
+- **[rapport.pdf](rapport.pdf)** - Rapport complet du projet
+- **[docs/rapport.tex](docs/rapport.tex)** - Source LaTeX du rapport
 - **[docs/html/index.html](docs/html/index.html)** - Documentation Doxygen du code
 
 ### Générer la documentation
@@ -164,4 +163,4 @@ Projet de TP - 2025
 
 ---
 
-Pour plus de détails, consultez [RESUME.md](RESUME.md) et la documentation dans `docs/guide/`.
+Pour plus de détails, consultez le [rapport.pdf](rapport.pdf) et la documentation Doxygen dans `docs/html/`.
