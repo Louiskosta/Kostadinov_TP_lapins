@@ -7,6 +7,7 @@
  */
 
 #include "simulation.h"
+#include "population.h"
 #include <time.h>
 
 /**
@@ -26,6 +27,10 @@ int main()
 
     // Simulation sur 100 ans
     population *pop = simulate_population(nbFemale, nbMale, 100);
+
+    // Affichage de la population finale
+    printf("\n===== POPULATION FINALE (après 100 ans) =====\n");
+    afficher_pop(pop, 1);
 
     // Nettoyage de la mémoire
     mpz_clear(nbFemale);

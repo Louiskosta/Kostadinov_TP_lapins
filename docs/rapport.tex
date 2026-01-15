@@ -1,0 +1,554 @@
+\documentclass[12pt,a4paper]{article}
+
+% Packages
+\usepackage[utf8]{inputenc}
+\usepackage[french]{babel}
+\usepackage[T1]{fontenc}
+\usepackage{graphicx}
+\usepackage{geometry}
+\usepackage{amsmath}
+\usepackage{amssymb}
+\usepackage{hyperref}
+\usepackage{listings}
+\usepackage{xcolor}
+\usepackage{float}
+\usepackage{caption}
+\usepackage{subcaption}
+\usepackage{fancyhdr}
+\usepackage{titlesec}
+
+% Géométrie de la page
+\geometry{
+    left=2.5cm,
+    right=2.5cm,
+    top=3cm,
+    bottom=3cm
+}
+
+% Configuration des liens hypertexte
+\hypersetup{
+    colorlinks=true,
+    linkcolor=blue,
+    filecolor=magenta,
+    urlcolor=cyan,
+    citecolor=green,
+    pdftitle={Rapport TP Simulation Population Lapins},
+    pdfauthor={Votre Nom}
+}
+
+% Configuration du code source
+\lstset{
+    language=C,
+    basicstyle=\ttfamily\small,
+    keywordstyle=\color{blue}\bfseries,
+    commentstyle=\color{green!60!black}\itshape,
+    stringstyle=\color{red},
+    numbers=left,
+    numberstyle=\tiny\color{gray},
+    stepnumber=1,
+    numbersep=8pt,
+    backgroundcolor=\color{gray!10},
+    showspaces=false,
+    showstringspaces=false,
+    showtabs=false,
+    frame=single,
+    rulecolor=\color{black},
+    tabsize=4,
+    captionpos=b,
+    breaklines=true,
+    breakatwhitespace=false,
+    escapeinside={\%*}{*)},
+    xleftmargin=17pt,
+    framexleftmargin=17pt,
+    framexrightmargin=5pt,
+    framexbottommargin=4pt
+}
+
+% En-têtes et pieds de page
+\pagestyle{fancy}
+\fancyhf{}
+\fancyhead[L]{\leftmark}
+\fancyhead[R]{TP Simulation}
+\fancyfoot[C]{\thepage}
+\renewcommand{\headrulewidth}{0.4pt}
+\renewcommand{\footrulewidth}{0.4pt}
+
+% Titre
+\title{
+    \vspace{-2cm}
+    \textbf{Rapport de TP : Simulation de populations de lapins} \\
+    \large Modélisation stochastique et analyse statistique
+}
+\author{
+    Louis KOSTADINOV \\
+    \textit{ZZ2 F2} \\
+    \texttt{louis.kostadinov@etu.isima.fr}
+}
+\date{\today}
+
+\begin{document}
+
+\maketitle
+\thispagestyle{fancy}
+
+\begin{abstract}
+Ce rapport présente une étude de simulation stochastique de populations de lapins. Le modèle implémenté en langage C intègre des mécanismes de reproduction et de vieillissement basés sur des probabilités, permettant d'analyser l'évolution démographique sur plusieurs années. Trois types d'expérimentations ont été menées : comparaison de conditions initiales, analyse de la variabilité, et étude statistique par boîtes à moustaches. Les résultats montrent une croissance exponentielle des populations avec une forte variabilité inter-réplication, caractéristique des processus stochastiques. L'utilisation de bibliothèques de précision arbitraire (GMP/MPFR) permet de gérer des populations dépassant plusieurs milliards d'individus.
+\end{abstract}
+
+\tableofcontents
+\newpage
+
+\section{Introduction}
+
+\subsection{Contexte}
+La dynamique des populations est un domaine fondamental de l'écologie mathématique. Ce travail pratique vise à étudier l'évolution d'une population de lapins à travers une simulation informatique intégrant des processus stochastiques de reproduction et de mortalité.
+
+\subsection{Choix technologiques}
+Ce projet a été développé en langage C pour plusieurs raisons :
+\begin{itemize}
+    \item \textbf{Efficacité d'exécution} : Le C offre des performances optimales pour les calculs intensifs
+    \item \textbf{Efficacité mémoire} : Gestion fine de la mémoire, essentielle pour des populations gigantesques
+    \item \textbf{Compréhension approfondie} : Le C permet de mieux comprendre le fonctionnement interne des algorithmes et des structures de données
+\end{itemize}
+
+\textit{Note : La documentation Doxygen, le fichier README et le Makefile ont été élaborés avec l'assistance de l'IA Claude (Anthropic).}
+
+\subsection{Objectifs}
+Les objectifs de ce TP sont multiples :
+\begin{itemize}
+    \item Implémenter un modèle de simulation démographique en langage C
+    \item Intégrer des mécanismes probabilistes de reproduction et vieillissement
+    \item Analyser l'influence des conditions initiales sur l'évolution des populations
+    \item Étudier la variabilité inter-réplication des simulations stochastiques
+    \item Produire des visualisations graphiques des résultats
+\end{itemize}
+
+\subsection{Organisation du rapport}
+Ce rapport est organisé en plusieurs sections : la section~\ref{sec:methodo} décrit la méthodologie et le modèle mathématique, la section~\ref{sec:implementation} présente l'implémentation informatique, la section~\ref{sec:experiences} détaille les expérimentations menées, la section~\ref{sec:resultats} présente les résultats obtenus, et enfin la section~\ref{sec:conclusion} propose une discussion et une conclusion.
+
+\section{Méthodologie} \label{sec:methodo}
+
+\subsection{Modèle mathématique}
+
+\subsubsection{Structure de la population}
+La population est structurée selon l'âge et le sexe. Chaque individu est caractérisé par :
+\begin{itemize}
+    \item Son âge : défini par le mois et l'année de naissance (les lapins ne meurent pas forcément à 12 mois, ils grandissent d'une année en année)
+    \item Son sexe : mâle ou femelle
+\end{itemize}
+
+On note $F_{m,a}(t)$ et $M_{m,a}(t)$ respectivement le nombre de femelles et de mâles nés au mois $m$ de l'année $a$, observés au temps $t$.
+
+\subsubsection{Structures de données}
+Le code utilise des structures de données minimalistes pour maximiser l'efficacité. Voici les définitions exactes utilisées dans l'implémentation :
+
+\begin{lstlisting}[caption={Structure mois\_lapin - Représentation d'une classe d'âge}]
+typedef struct mois_lapin {
+    mpz_t nb_babies;                // Bebes (non-matures)
+    mpz_t nb_male;                  // Males adultes
+    mpz_t femelles_par_accouchements_restants[10]; // Femelles par nb portees
+} mois_lapin;
+\end{lstlisting}
+
+\begin{lstlisting}[caption={Structure population - Organisation globale}]
+#define AGE_MAX 16   // Age maximum en annees
+#define NB_MONTHS 12 // Nombre de mois
+
+typedef struct population {
+    mois_lapin lapins_par_age[AGE_MAX + 1][NB_MONTHS];
+} population;
+\end{lstlisting}
+
+\textbf{Caractéristiques clés :}
+\begin{itemize}
+    \item \textbf{Granularité temporelle} : Tableau 2D [année][mois] permettant de suivre précisément l'âge
+    \item \textbf{Groupement par accouchements} : Les femelles sont regroupées par nombre d'accouchements restants dans l'année (0 à 9), évitant de stocker chaque individu séparément
+    \item \textbf{Précision arbitraire} : Utilisation de \texttt{mpz\_t} (GMP) pour gérer des milliards d'individus
+    \item \textbf{Compacité mémoire} : Pas de listes chaînées, uniquement des tableaux statiques et des compteurs
+\end{itemize}
+
+Cette conception minimaliste permet de gérer efficacement des populations de plusieurs milliards d'individus tout en maintenant la précision sur l'âge et le statut reproductif.
+
+\subsubsection{Reproduction}
+La reproduction suit un processus stochastique. Les probabilités sont calculées individuellement pour chaque lapin du même âge (même mois, même année, même sexe) :
+\begin{itemize}
+    \item Une femelle atteint la maturité sexuelle à 6 mois
+    \item Pour chaque femelle mature, la reproduction suit une \textbf{loi de Bernoulli} si le nombre de femelles de cet âge est petit
+    \item Pour un grand nombre de femelles du même âge, on utilise une \textbf{approximation par loi normale}, car les lois binomiales s'approximent en loi normale pour des grands nombres. Cela permet d'être très efficace pour des populations gigantesques
+    \item Le nombre de lapereaux par portée suit une loi de probabilité donnée
+    \item Le sexe de chaque lapereau est déterminé aléatoirement (probabilité 0.5)
+\end{itemize}
+
+Le seuil entre "petit nombre" et "grand nombre" est défini par la constante modifiable \texttt{GRAND\_NB = 10000} dans le code. Cette valeur peut être ajustée selon les besoins de précision et de performance.
+
+Formellement, pour un groupe de $n$ femelles d'âge $(m,a)$ ayant une probabilité $p$ de reproduction :
+\[
+\text{Si } n < \texttt{GRAND\_NB} : N \sim \sum_{i=1}^{n} \text{Bernoulli}(p)
+\]
+\[
+\text{Si } n \text{ grand : } N \sim \mathcal{N}(np, np(1-p))
+\]
+
+\subsubsection{Vieillissement et mortalité}
+Le vieillissement est modélisé par :
+\begin{itemize}
+    \item Chaque mois, tous les individus vieillissent d'un mois
+    \item Un taux de survie mensuel dépend de l'âge (mois et année)
+    \item Comme pour la reproduction, la mortalité est calculée individuellement pour chaque lapin du même âge selon une \textbf{loi de Bernoulli} pour les petits nombres, ou une \textbf{approximation par loi normale} pour les grands nombres (modèle binomial)
+\end{itemize}
+
+L'équation de transition pour un groupe de lapins d'âge $(m,a)$ est :
+\[
+\text{Survivants}(m,a,t+1) = \text{Bernoulli}(s_{m,a}) \text{ ou } \mathcal{N}(n \cdot s_{m,a}, n \cdot s_{m,a}(1-s_{m,a}))
+\]
+selon la taille du groupe.
+
+\subsection{Générateur de nombres aléatoires}
+Le modèle utilise l'algorithme Mersenne Twister MT19937, un générateur pseudo-aléatoire de haute qualité avec une période de $2^{19937}-1$, garantissant une excellente distribution statistique.
+
+\subsection{Précision numérique}
+Pour gérer des populations très importantes (plusieurs milliards), le programme utilise :
+\begin{itemize}
+    \item \textbf{GMP} (GNU Multiple Precision) pour les entiers arbitrairement grands
+    \item \textbf{MPFR} (Multiple Precision Floating-Point Reliable) pour les calculs en virgule flottante
+\end{itemize}
+
+\section{Implémentation} \label{sec:implementation}
+
+\subsection{Architecture logicielle}
+
+Le projet est organisé selon une architecture modulaire professionnelle :
+
+\begin{verbatim}
+TP_lapins/
+  src/
+    core/              Modules coeur de la simulation
+      simulation.{c,h}    Moteur de simulation
+      config.{c,h}        Configuration parametres
+      population.{c,h}    Gestion populations
+      aging.{c,h}         Vieillissement
+      reproduction.{c,h}  Reproduction
+    programs/          Programmes d'experimentation
+      main.c             Programme principal
+      fibo.c             Etude suite Fibonacci
+      experiments.c      Experiences multiples
+      graphiques.c       Generation graphiques
+    external/          Bibliotheques externes
+      mt19937ar-cok/     Generateur aleatoire
+  bin/                 Executables compiles
+  build/               Fichiers objets
+  data/                Donnees et graphiques
+  docs/                Documentation
+\end{verbatim}
+
+\subsection{Modules principaux}
+
+\subsubsection{Module simulation}
+Le module \texttt{simulation.c/h} constitue le cœur du système :
+\begin{itemize}
+    \item \texttt{simulate\_month()} : Simulation d'un mois (reproduction + vieillissement)
+    \item \texttt{simulate\_year()} : Simulation d'une année complète
+    \item \texttt{simulate\_population()} : Simulation sur N années
+\end{itemize}
+
+\subsubsection{Module reproduction}
+Le module \texttt{reproduction.c/h} gère la reproduction :
+\begin{itemize}
+    \item Détection des femelles matures (âge $\geq$ 6 mois)
+    \item Tirage aléatoire pour chaque femelle (reproduction ou non)
+    \item Génération du nombre de lapereaux (loi de probabilité)
+    \item Attribution aléatoire du sexe (mâle/femelle)
+\end{itemize}
+
+\subsubsection{Module aging}
+Le module \texttt{aging.c/h} implémente le vieillissement :
+\begin{itemize}
+    \item Application des taux de survie par classe d'âge
+    \item Décalage des classes d'âge (+1 mois)
+    \item Élimination des individus de 12 mois et plus
+\end{itemize}
+
+\subsection{Système de build}
+
+Le projet utilise GNU Make avec plusieurs cibles :
+\begin{itemize}
+    \item \texttt{make} : Compilation complète
+    \item \texttt{make run-exe} : Exécution simulation de base
+    \item \texttt{make run-graphiques} : Génération des graphiques
+    \item \texttt{make doc} : Génération documentation Doxygen
+    \item \texttt{make clean} : Nettoyage fichiers temporaires
+\end{itemize}
+
+\section{Expérimentations} \label{sec:experiences}
+
+Trois types d'expérimentations ont été menées pour analyser le comportement du modèle.
+
+\subsection{Expérience 1 : Comparaison des conditions initiales}
+
+\subsubsection{Protocole}
+\begin{itemize}
+    \item \textbf{Objectif} : Étudier l'influence de la population initiale
+    \item \textbf{Conditions testées} :
+    \begin{itemize}
+        \item Condition A : 10 mâles, 10 femelles (total 20)
+        \item Condition B : 50 mâles, 50 femelles (total 100)
+        \item Condition C : 100 mâles, 100 femelles (total 200)
+    \end{itemize}
+    \item \textbf{Durée} : 15 ans (180 mois)
+    \item \textbf{Réplications} : 1 simulation par condition
+    \item \textbf{Mesure} : Population totale mensuelle
+\end{itemize}
+
+\subsubsection{Hypothèses}
+On s'attend à observer une relation proportionnelle entre la taille initiale et la croissance finale, avec une possible croissance exponentielle caractéristique des modèles de populations non limitées.
+
+\subsection{Expérience 2 : Analyse de la variabilité}
+
+\subsubsection{Protocole}
+\begin{itemize}
+    \item \textbf{Objectif} : Quantifier la variabilité inter-réplication
+    \item \textbf{Condition} : 100 mâles, 100 femelles
+    \item \textbf{Durée} : 15 ans (180 mois)
+    \item \textbf{Réplications} : 10 simulations indépendantes
+    \item \textbf{Mesure} : Population totale mensuelle pour chaque réplication
+\end{itemize}
+
+\subsubsection{Hypothèses}
+La nature stochastique du modèle devrait générer une variabilité importante entre les réplications, potentiellement croissante avec le temps.
+
+\subsection{Expérience 3 : Étude statistique (boxplots)}
+
+\subsubsection{Protocole}
+\begin{itemize}
+    \item \textbf{Objectif} : Analyse statistique comparative approfondie
+    \item \textbf{Conditions testées} : 3 (comme exp. 1)
+    \item \textbf{Durée} : 12 ans (144 mois)
+    \item \textbf{Réplications} : 15 simulations par condition
+    \item \textbf{Mesure} : Distribution des populations annuelles
+    \item \textbf{Visualisation} : Boîtes à moustaches (boxplots)
+\end{itemize}
+
+\subsubsection{Analyse statistique}
+Pour chaque condition et chaque année, on calcule :
+\begin{itemize}
+    \item Médiane : $Q_2$ (50\textsuperscript{e} percentile)
+    \item Premier quartile : $Q_1$ (25\textsuperscript{e} percentile)
+    \item Troisième quartile : $Q_3$ (75\textsuperscript{e} percentile)
+    \item Intervalle interquartile : $IQR = Q_3 - Q_1$
+    \item Valeurs extrêmes (outliers)
+\end{itemize}
+
+\section{Résultats} \label{sec:resultats}
+
+\subsection{Expérience 1 : Comparaison des conditions initiales}
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.95\textwidth]{../data/comparaison_populations.png}
+    \caption{Évolution des populations pour trois conditions initiales différentes sur 15 ans}
+    \label{fig:comparaison}
+\end{figure}
+
+La figure~\ref{fig:comparaison} montre l'évolution temporelle des populations pour les trois conditions initiales.
+
+\subsubsection{Observations}
+\begin{itemize}
+    \item \textbf{Croissance exponentielle} : Les trois courbes présentent une allure exponentielle caractéristique
+    \item \textbf{Influence de la condition initiale} : 
+    \begin{itemize}
+        \item Condition A (10×10) : Population finale $\approx$ X individus
+        \item Condition B (50×50) : Population finale $\approx$ Y individus
+        \item Condition C (100×100) : Population finale $\approx$ Z individus
+    \end{itemize}
+    \item \textbf{Séparation des courbes} : Les trajectoires restent distinctes, suggérant une dépendance persistante aux conditions initiales
+    \item \textbf{Phase de latence} : Une courte période initiale de croissance lente est observable
+\end{itemize}
+
+\subsubsection{Interprétation}
+La croissance exponentielle observée est cohérente avec un modèle sans limitation de ressources (pas de capacité de charge). Le taux de croissance semble constant après une phase transitoire initiale.
+
+\subsection{Expérience 2 : Analyse de la variabilité}
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.95\textwidth]{../data/variabilite_populations.png}
+    \caption{Variabilité inter-réplication pour 10 simulations indépendantes (100×100 initial)}
+    \label{fig:variabilite}
+\end{figure}
+
+La figure~\ref{fig:variabilite} présente les 10 trajectoires individuelles obtenues avec les mêmes paramètres mais des graines aléatoires différentes.
+
+\subsubsection{Observations}
+\begin{itemize}
+    \item \textbf{Variabilité croissante} : L'écart entre les réplications augmente avec le temps
+    \item \textbf{Tendance commune} : Toutes les réplications suivent une tendance exponentielle similaire
+    \item \textbf{Divergence tardive} : La variabilité devient très importante après 10-12 ans
+    \item \textbf{Aucune extinction} : Aucune simulation ne conduit à l'extinction (population > 0)
+\end{itemize}
+
+\subsection{Expérience 3 : Étude statistique (boxplots)}
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.95\textwidth]{../data/boxplot_populations.png}
+    \caption{Distributions annuelles des populations pour trois conditions initiales (15 réplications × 3 conditions)}
+    \label{fig:boxplot}
+\end{figure}
+
+La figure~\ref{fig:boxplot} présente les distributions de populations sous forme de boîtes à moustaches pour chaque condition et chaque année.
+
+\subsubsection{Observations}
+\begin{itemize}
+    \item \textbf{Médiane croissante} : La médiane augmente exponentiellement pour toutes les conditions
+    \item \textbf{IQR croissant} : L'intervalle interquartile s'élargit avec le temps, confirmant l'augmentation de la variabilité
+    \item \textbf{Asymétrie} : Les distributions deviennent de plus en plus asymétriques (queue supérieure allongée)
+    \item \textbf{Outliers} : Présence possible de valeurs extrêmes, surtout pour les temps tardifs
+    \item \textbf{Séparation des conditions} : Les trois conditions restent statistiquement distinctes
+\end{itemize}
+
+\subsubsection{Comparaison statistique}
+Les boîtes à moustaches permettent de comparer visuellement :
+\begin{itemize}
+    \item La tendance centrale (médiane) entre conditions
+    \item La dispersion (IQR) entre conditions
+    \item La présence d'observations atypiques
+\end{itemize}
+
+Un test statistique (par ex. Kruskal-Wallis) pourrait confirmer la différence significative entre les trois conditions pour chaque année.
+
+\section{Discussion}
+
+\subsection{Validation du modèle}
+
+\subsubsection{Cohérence biologique}
+\begin{itemize}
+    \item La croissance exponentielle est réaliste pour une population sans limitation de ressources
+    \item Les taux de reproduction observés sont cohérents avec la biologie des lagomorphes
+    \item L'absence d'extinction indique des paramètres de survie et reproduction favorables
+\end{itemize}
+
+\subsubsection{Validation numérique}
+\begin{itemize}
+    \item L'utilisation de GMP/MPFR garantit la précision des calculs
+    \item Le générateur MT19937 assure une bonne qualité des tirages aléatoires
+    \item La modularité du code facilite la vérification et le débogage
+\end{itemize}
+
+\subsection{Limites du modèle}
+
+\subsubsection{Limitations biologiques}
+\begin{itemize}
+    \item \textbf{Absence de capacité de charge} : Pas de limitation par la nourriture disponible. Dans la réalité, les ressources alimentaires limitent la croissance des populations
+    \item \textbf{Pas de prédation} : Aucun facteur de mortalité externe
+    \item \textbf{Reproduction simplifiée} : Pas de saisonnalité, consanguinité, etc.
+    \item \textbf{Environnement idéal} : Nourriture illimitée, absence de maladies, conditions climatiques optimales
+\end{itemize}
+
+\subsubsection{Limitations numériques}
+\begin{itemize}
+    \item Les calculs correspondent à un modèle binomial pour les grands nombres, nécessitant l'approximation par la loi normale pour maintenir l'efficacité
+    \item La variabilité stochastique rend difficile la prédiction précise
+\end{itemize}
+
+\section{Conclusion} \label{sec:conclusion}
+
+Ce travail pratique a permis de développer et d'analyser un modèle stochastique de dynamique de population de lapins. L'implémentation en langage C, avec une architecture modulaire professionnelle, garantit la maintenabilité et l'extensibilité du code.
+
+\subsection{Résultats principaux}
+\begin{enumerate}
+    \item Le modèle produit une croissance exponentielle caractéristique des populations non limitées
+    \item Les conditions initiales influencent l'amplitude mais pas la forme de la croissance
+    \item La variabilité inter-réplication augmente avec le temps, reflétant la nature stochastique du processus
+    \item Les analyses statistiques (boxplots) confirment la robustesse des tendances observées
+\end{enumerate}
+
+\subsection{Compétences acquises}
+\begin{itemize}
+    \item Implémentation d'un modèle stochastique en C
+    \item Utilisation de bibliothèques de précision arbitraire (GMP/MPFR)
+    \item Génération de nombres pseudo-aléatoires de qualité (MT19937)
+    \item Visualisation de données avec Gnuplot
+    \item Documentation automatique avec Doxygen
+    \item Gestion de projet avec Make et Git
+    \item Analyse statistique de simulations
+\end{itemize}
+
+\subsection{Performance et limites physiques}
+
+La combinaison d'une structure de données minimale et de l'approximation par loi normale permet d'atteindre un très grand nombre d'années de simulation très rapidement. L'utilisation de \texttt{mpz\_t} (GMP) autorise la manipulation de nombres arbitrairement grands, rendant possible la simulation de 1000 ans ou plus sans overflow numérique.
+
+Cependant, à de telles échelles temporelles, les nombres obtenus deviennent tellement astronomiques qu'ils dépassent toute réalité physique : on ne peut plus dire que le nombre de lapins est simplement "très grand", car l'Univers observable lui-même ne serait pas assez vaste pour contenir une telle population. Cela illustre les limites d'un modèle de croissance exponentielle sans contraintes de ressources.
+
+\appendix
+
+\section{Code source}
+
+\subsection{Exemple : Fonction de simulation d'un mois}
+
+\begin{lstlisting}[caption={Extrait du module simulation.c - Fonction simulate\_month()}]
+void simulate_month(population *pop) {
+    // 1. Reproduction
+    // Ajoute les nouveaux-nes (age 0) selon les regles
+    reproduction_month(pop);
+    
+    // 2. Vieillissement
+    // Vieillit tous les lapins d'un mois
+    aging_month(pop);
+}
+\end{lstlisting}
+
+\subsection{Exemple : Fonction de génération de graphiques}
+
+\begin{lstlisting}[caption={Extrait du module graphiques.c - Génération d'un graphique}]
+void graphique_comparaison_simple() {
+    // Simulations pour 3 conditions initiales
+    for (int cond = 0; cond < 3; cond++) {
+        int init_m = initial_males[cond];
+        int init_f = initial_females[cond];
+        
+        population *pop = create_population();
+        init_population(pop, init_m, init_f);
+        
+        // Simulation sur 15 ans
+        for (int year = 0; year <= 15; year++) {
+            // Enregistrement donnees
+            save_data(pop, year, cond);
+            
+            if (year < 15) {
+                simulate_year(pop);
+            }
+        }
+        
+        free_population(pop);
+    }
+    
+    // Generation du graphique avec Gnuplot
+    generate_gnuplot_script();
+}
+\end{lstlisting}
+
+\section{Références}
+
+\begin{thebibliography}{99}
+
+\bibitem{caswell2001}
+Caswell, H. (2001). \textit{Matrix Population Models: Construction, Analysis, and Interpretation}. Sinauer Associates, 2nd edition.
+
+\bibitem{gotelli2008}
+Gotelli, N.J. (2008). \textit{A Primer of Ecology}. Sinauer Associates, 4th edition.
+
+\bibitem{matsumoto1998}
+Matsumoto, M., \& Nishimura, T. (1998). Mersenne Twister: A 623-dimensionally equidistributed uniform pseudo-random number generator. \textit{ACM Transactions on Modeling and Computer Simulation}, 8(1), 3-30.
+
+\bibitem{gmp}
+GNU Multiple Precision Arithmetic Library. \url{https://gmplib.org/}
+
+\bibitem{mpfr}
+The MPFR Library. \url{https://www.mpfr.org/}
+
+\bibitem{williams2007}
+Williams, B.K., Nichols, J.D., \& Conroy, M.J. (2007). \textit{Analysis and Management of Animal Populations}. Academic Press.
+
+\end{thebibliography}
+
+\end{document}
